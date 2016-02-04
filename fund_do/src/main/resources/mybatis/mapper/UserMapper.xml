@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fund.biz.dao.CardQuotaMapper" >
+  <resultMap id="BaseResultMap" type="com.wangyin.industry.fund.biz.domain.CardQuota" >
+    <id column="QUO_ID" property="quoId" jdbcType="BIGINT" />
+    <result column="WALLET_ID" property="walletId" jdbcType="VARCHAR" />
+    <result column="CUSTOMER_NO" property="customerNo" jdbcType="VARCHAR" />
+    <result column="BANK_CODE" property="bankCode" jdbcType="VARCHAR" />
+    <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+    <result column="TAG_CARD" property="tagCard" jdbcType="CHAR" />
+    <result column="IN_QUOTA" property="inQuota" jdbcType="DECIMAL" />
+    <result column="CONSUME_QUOTA" property="consumeQuota" jdbcType="DECIMAL" />
+    <result column="OUT_QUOTA" property="outQuota" jdbcType="DECIMAL" />
+    <result column="SEQ_NO" property="seqNo" jdbcType="INTEGER" />
+    <result column="VERSION_NO" property="versionNo" jdbcType="INTEGER" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIED_TIME" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="QUOTA_MODIFIED_TIME" property="quotaModifiedTime" jdbcType="TIMESTAMP" ></result>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    QUO_ID, WALLET_ID, CUSTOMER_NO, BANK_CODE, CARD_NO, TAG_CARD, IN_QUOTA, CONSUME_QUOTA, 
+    OUT_QUOTA, SEQ_NO, VERSION_NO, STATUS,QUOTA_MODIFIED_TIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from FD_CARD_QUOTA
+    where QUO_ID = #{quoId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from FD_CARD_QUOTA
+    where QUO_ID = #{quoId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangyin.industry.fund.biz.domain.CardQuota"  useGeneratedKeys="true" keyProperty="id">
+    insert into FD_CARD_QUOTA (QUO_ID, WALLET_ID, CUSTOMER_NO, 
+      BANK_CODE, CARD_NO, TAG_CARD, 
+      IN_QUOTA, CONSUME_QUOTA, OUT_QUOTA, 
+      SEQ_NO, VERSION_NO, STATUS, 
+      CREATED_TIME,QUOTA_MODIFIED_TIME)
+    values (#{quoId,jdbcType=BIGINT}, #{walletId,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
+      #{bankCode,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, #{tagCard,jdbcType=CHAR}, 
+      #{inQuota,jdbcType=DECIMAL}, #{consumeQuota,jdbcType=DECIMAL}, #{outQuota,jdbcType=DECIMAL}, 
+      #{seqNo,jdbcType=INTEGER}, #{versionNo,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP},now())
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.wangyin.industry.fund.biz.domain.CardQuota" >
+    update FD_CARD_QUOTA
+    set WALLET_ID = #{walletId,jdbcType=VARCHAR},
+      CUSTOMER_NO = #{customerNo,jdbcType=VARCHAR},
+      BANK_CODE = #{bankCode,jdbcType=VARCHAR},
+      CARD_NO = #{cardNo,jdbcType=VARCHAR},
+      TAG_CARD = #{tagCard,jdbcType=CHAR},
+      IN_QUOTA = #{inQuota,jdbcType=DECIMAL},
+      CONSUME_QUOTA = #{consumeQuota,jdbcType=DECIMAL},
+      OUT_QUOTA = #{outQuota,jdbcType=DECIMAL},
+      SEQ_NO = #{seqNo,jdbcType=INTEGER},
+      VERSION_NO = #{versionNo,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=VARCHAR},
+      QUOTA_MODIFIED_TIME = #{quotaModifiedTime,jdbcType=TIMESTAMP}
+    where QUO_ID = #{quoId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPKAndVersion" parameterType="com.wangyin.industry.fund.biz.domain.CardQuota" >
+    update FD_CARD_QUOTA
+    set TAG_CARD = #{tagCard,jdbcType=CHAR},
+      IN_QUOTA = #{inQuota,jdbcType=DECIMAL},
+      CONSUME_QUOTA = #{consumeQuota,jdbcType=DECIMAL},
+      OUT_QUOTA = #{outQuota,jdbcType=DECIMAL},
+      SEQ_NO = #{seqNo,jdbcType=INTEGER},
+      VERSION_NO = #{versionNo,jdbcType=INTEGER}+1,
+      QUOTA_MODIFIED_TIME = #{quotaModifiedTime,jdbcType=TIMESTAMP}
+    where QUO_ID = #{quoId,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByWalletId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from FD_CARD_QUOTA
+    where WALLET_ID = #{walletId,jdbcType=VARCHAR}
+    order by SEQ_NO desc;
+  </select>
+  <select id="selectByCustomerNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from FD_CARD_QUOTA
+    where CUSTOMER_NO = #{customerNo,jdbcType=VARCHAR}
+    order by SEQ_NO desc;
+  </select>
+  <select id="selectSBankByWalletId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from FD_CARD_QUOTA
+    where WALLET_ID = #{walletId,jdbcType=VARCHAR}
+    and BANK_CODE = #{bankCode,jdbcType=VARCHAR}
+    and CARD_NO = #{cardNo,jdbcType=VARCHAR}
+  </select>
+  <select id="selectSBankByCustomerNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from FD_CARD_QUOTA
+    where CUSTOMER_NO = #{customerNo,jdbcType=VARCHAR}
+    and BANK_CODE = #{bankCode,jdbcType=VARCHAR}
+    and CARD_NO = #{cardNo,jdbcType=VARCHAR}
+  </select>
+  <select id="selectLabelCardByWallet" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from FD_CARD_QUOTA
+    where WALLET_ID = #{wallet,jdbcType=VARCHAR}
+    and TAG_CARD= 'Y'
+  </select>
+  <select id="selectLabelCardByCustomerNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from FD_CARD_QUOTA
+    where CUSTOMER_NO = #{customerNo,jdbcType=VARCHAR}
+    and TAG_CARD= 'Y'
+  </select>
+  
+</mapper>
